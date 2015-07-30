@@ -29,14 +29,13 @@ set smartindent             " 开启新行时使用智能自动缩进
 set backspace=indent,eol,start " 不设定在插入状态无法用退格键和 Delete 键删除回车符
 "}}}
 
-let g:mapleader=','
+let g:mapleader=';'
 vnoremap <Leader>y "+y      " 设置快捷键将选中文本块复制至系统剪贴板
 nmap <Leader>p "+p          " 设置快捷键将系统剪贴板内容粘贴至
 
 " 快捷键设置{{{
 
 map <silent> eh :tabprevious<CR>
-nnoremap <silent><F3> :TlistToggle<CR>
 map <silent> el :tabnext<CR>
 map <silent> eH :TabmovePrevious<CR>
 map <silent> eL :TabmoveNext<CR>
@@ -44,7 +43,7 @@ map <silent> eN :nohlsearch<CR>
 map <silent> et o-------------------- <C-R>=strftime('%Y-%m-%d %H:%M:%S')<CR> --------------------<CR>
 map <silent> es :split<CR>
 map <silent> eS :vsplit<CR>
-map <silent> ew :set nowrap!<CR>
+"map <silent> ew :set nowrap!<CR>
 map <silent> eg :!/usr/bin/git log --stat %<CR>
 map <silent> eG :echo system('/usr/bin/git blame '.expand('%').' -p -L '.line('.').','.line('.'))<CR>
 map <silent> en :NERDTreeToggle<CR>
@@ -56,6 +55,7 @@ map <silent> ea :DoxAuthor<CR>
 map <silent> ec :DoxLic<CR>
 
 
+map <silent> ewq :wq<CR>       " 定义快捷键关闭当前分割窗口
 map <silent> eq :q<CR>       " 定义快捷键关闭当前分割窗口
 map <silent> eQ :q!<CR>       " 定义快捷键关闭当前分割窗口
 nmap <leader>w :w<CR>       " 定义快捷键保存当前窗口内容
@@ -73,6 +73,9 @@ set nocompatible            " 关闭 vi 兼容模式
 set list
 set listchars=tab:>-,trail:."TAB会被显示成 ">—" 而行尾多余的空白字符显示"." 2015-07-22
 set pastetoggle=<F8>
+
+set hidden " 避免必须保存修改才可以跳转buffer
+
 "}}}
 
 " 配色方案{{{
@@ -109,9 +112,23 @@ nnoremap <C-RETURN> :bnext<CR>
 nnoremap <C-S-RETURN> :bprevious<CR>
 map bn :bnext<cr>
 map bp :bprevious<cr>
-map bl :blast<cr>
 map bf :bfirst<cr>
 map bd :bdelete<cr>
+" 查看buffers
+nnoremap bl :ls<CR>
+" 通过索引快速跳转
+nnoremap <Leader>1 :1b<CR>
+nnoremap <Leader>2 :2b<CR>
+nnoremap <Leader>3 :3b<CR>
+nnoremap <Leader>4 :4b<CR>
+nnoremap <Leader>5 :5b<CR>
+nnoremap <Leader>6 :6b<CR>
+nnoremap <Leader>7 :7b<CR>
+nnoremap <Leader>8 :8b<CR>
+nnoremap <Leader>9 :9b<CR>
+nnoremap <Leader>0 :10b<CR>
+
+
 "}}}
 
 " Tab操作快捷方式! {{{
@@ -502,8 +519,12 @@ Plugin 'godlygeek/tabular'               " 对齐插件
 Plugin 'kana/vim-smartinput'             " 只能输入
 Plugin 'tpope/vim-surround'              " 闭合处理
 Plugin 'yegappan/mru'                    " 最近打开的文件
+Plugin 'bling/vim-bufferline'
+Plugin 'jeetsukumaran/vim-buffergator'
 "Plugin 'drmingdrmer/vim-tabbar'          " tab
 Plugin 'jlanzarotta/bufexplorer' " buffer
+Plugin 'kien/ctrlp.vim'
+Plugin 'craigemery/vim-autotag' "自动更新tags
 "Plugin 'UltiSnips'
 "Plugin 'shawncplus/phpcomplete.vim'
 "Plugin 'eikenb/acp'
@@ -540,12 +561,11 @@ let g:DoxygenToolkit_paramTag_pre="@param\t"
 let g:DoxygenToolkit_returnTag="@returns\t"
 "let g:DoxygenToolkit_blockHeader="--------------------------------------------------------------------------"
 "let g:DoxygenToolkit_blockFooter="--------------------------------------------------------------------------"
-let g:DoxygenToolkit_licenseTag="GPL 2.0"
+let g:DoxygenToolkit_licenseTag = s:licenseTag
 
 let s:licenseTag = "\<enter>www.firstp2p.com\<enter>"
 let s:licenseTag = s:licenseTag . "All right reserved\<enter>"
 let s:licenseTag = s:licenseTag . "\<enter>Copyright(C)\<enter>"
-let g:DoxygenToolkit_licenseTag = s:licenseTag
 let g:DoxygenToolkit_briefTag_funcName="no"
 let g:doxygen_enhanced_color=1
 
@@ -561,8 +581,8 @@ let g:DoxygenToolkit_endCommentBlock = " */"
 xnoremap p pgvy
 
 "" easymotion
-let g:mapleader = ','
-let g:EasyMotion_leader_key = ','
+let g:mapleader = ';'
+let g:EasyMotion_leader_key = ';'
 let g:EasyMotion_do_mapping = 0 " Disable default mappings
 
 " Bi-directional find motion
@@ -606,7 +626,42 @@ let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 " If you want :UltiSnipsEdit to split your window.
 let g:UltiSnipsEditSplit="vertical"
 
-"tabular
+"tabular 对齐插件
 let g:tabular_loaded = 1
 
+" Enable the list of buffers
+let g:airline#extensions#tabline#enabled = 1
+" Show just the filename
+let g:airline#extensions#tabline#fnamemod = ':t'
+" This allows buffers to be hidden if you've modified a buffer.
+" This is almost a must if you wish to use buffers in this way.
+set hidden
+" To open a new empty buffer
+" This replaces :tabnew which I used to bind to this mapping
+nmap <leader>T :enew<cr>
+" Move to the next buffer
+nmap <leader>l :bnext<CR>
+" Move to the previous buffer
+nmap <leader>h :bprevious<CR>
+" Close the current buffer and move to the previous one
+; This replicates the idea of closing a tab
+nmap <leader>bq :bp <BAR> bd #<CR>
+" Show all open buffers and their status
+nmap <leader>bl :ls<CR>
+" Setup some default ignores
+let g:ctrlp_custom_ignore = {
+  \ 'dir':  '\v[\/](\.(git|hg|svn)|\_site)$',
+  \ 'file': '\v\.(exe|so|dll|class|png|jpg|jpeg)$',
+\}
+
+" Use the nearest .git directory as the cwd
+" This makes a lot of sense if you are working on a project that is in version
+" control. It also supports works with .svn, .hg, .bzr.
+let g:ctrlp_working_path_mode = 'r'
+" Use a leader instead of the actual named binding
+nmap <leader>p :CtrlP<cr>
+" Easy bindings for its various modes
+nmap <leader>bb :CtrlPBuffer<cr>
+nmap <leader>bm :CtrlPMixed<cr>
+nmap <leader>br :CtrlPMRU<cr>
 " }}}
