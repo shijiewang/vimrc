@@ -321,11 +321,10 @@ vmap <C-c> "+y
 " F4 打开隐藏taglist窗口
 "-----------------------------------------------------------------
 nnoremap <silent><F3> :TlistToggle<CR>
-let Tlist_Show_One_File = 1            " 不同时显示多个文件的tag，只显示当前文件的
-let Tlist_Exit_OnlyWindow = 1          " 如果taglist窗口是最后一个窗口，则退出vim
-let Tlist_Use_Right_Window = 1         " 在右侧窗口中显示taglist窗口
-let Tlist_File_Fold_Auto_Close=1       " 自动折叠当前非编辑文件的方法列表
-let Tlist_Ctags_Cmd = '/usr/local/bin/ctags'
+let Tlist_Show_One_File = 1
+let Tlist_Use_Right_Window = 1
+let g:tlist_php_settings = 'php;c:class;i:interface;d:constant;f:function'
+
 "let Tlist_Auto_Open = 0
 "let Tlist_Auto_Update = 1
 "let Tlist_Hightlight_Tag_On_BufEnter = 1
@@ -399,6 +398,7 @@ Plugin 'jeetsukumaran/vim-buffergator'
 Plugin 'jlanzarotta/bufexplorer' " buffer
 Plugin 'kien/ctrlp.vim'
 Plugin 'craigemery/vim-autotag' "自动更新tags
+Plugin 'altercation/vim-colors-solarized'
 "Plugin 'UltiSnips'
 "Plugin 'shawncplus/phpcomplete.vim'
 "Plugin 'eikenb/acp'
@@ -408,7 +408,10 @@ call vundle#end()            " required
 filetype plugin indent on    " required
 " }}}
 
-let g:molokai_original = 1
+"let g:molokai_original = 1
+syntax enable
+set background=dark
+colorscheme solarized
 let g:rehash256 = 1
 
 " 忽略文件 {{{
