@@ -1,78 +1,72 @@
 " 配置说明{{{
+" =============================================
+" @author wangshijie<wangshihchieh@sina.com>
+" =============================================
 " }}}
 
 " 基本配置{{{
-syntax on                   " 自动语法高亮
-"colorscheme molokai        " 设定配色方案
-set number                  " 显示行号
-set mouse=a                 " 鼠标直接定位光标
-set shiftwidth=4            " 设定 << 和 >> 命令移动时的宽度为 4
-set softtabstop=4           " 使得按退格键时可以一次删掉 4 个空格
-set expandtab               "tab用空格标示
-set tabstop=4               " 设定 tab 长度为 4
-set nobackup                " 覆盖文件时不备份
-set autochdir               " 自动切换当前目录为当前文件所在的目录
-set backupcopy=yes          " 设置备份时的行为为覆盖
-set ignorecase smartcase    " 搜索时忽略大小写，但在有一个或以上大写字母时仍保持对大小写敏感
-"set nowrapscan              " 禁止在搜索到文件两端时重新搜索
-set incsearch               " 输入搜索内容时就显示搜索结果
-set hlsearch                " 搜索时高亮显示被找到的文本
-set noerrorbells            " 关闭错误信息响铃
-set novisualbell            " 关闭使用可视响铃代替呼叫
+syntax on                      " 自动语法高亮
+set number                     " 显示行号
+set mouse=a                    " 鼠标直接定位光标
+set shiftwidth=4               " 设定 << 和 >> 命令移动时的宽度为 4
+set softtabstop=4              " 使得按退格键时可以一次删掉 4 个空格
+set expandtab                  " tab用空格标示
+set tabstop=4                  " 设定 tab 长度为 4
+set nobackup                   " 覆盖文件时不备份
+set autochdir                  " 自动切换当前目录为当前文件所在的目录
+set backupcopy=yes             " 设置备份时的行为为覆盖
+set ignorecase smartcase       " 智能搜索搜索
+set incsearch                  " 输入搜索内容时就显示搜索结果
+set hlsearch                   " 搜索时高亮显示被找到的文本
+set noerrorbells               " 关闭错误信息响铃
+set novisualbell               " 关闭使用可视响铃代替呼叫
 set vb t_vb=                   " 置空错误铃声的终端代码
-set showmatch               " 插入括号时，短暂地跳转到匹配的对应括号
-set matchtime=2             " 短暂跳转到匹配括号的时间
-set hidden                  " 允许在有未保存的修改时切换缓冲区，此时的修改由 vim 负责保存
-set guioptions-=T           " 隐藏工具栏
-set guioptions-=m           " 隐藏菜单栏
-set smartindent             " 开启新行时使用智能自动缩进
+set showmatch                  " 插入括号时，短暂地跳转到匹配的对应括号
+set matchtime=2                " 短暂跳转到匹配括号的时间
 set backspace=indent,eol,start " 不设定在插入状态无法用退格键和 Delete 键删除回车符
-"}}}
+let mapleader=';'              " 设置触发键
+let g:mapleader=';'            " 设置触发键
+vnoremap <Leader>y "+y         " 设置快捷键将选中文本块复制至系统剪贴板
+set nocompatible               " 关闭 vi 兼容模式
+set hidden                     " 避免必须保存修改才可以跳转bufer
+set list
+set listchars=tab:>-,trail:. " TAB会被显示成 ' >— ' 而行尾多余的空白字符显示 ' . ' 2015-07-22
+set autochdir                " 自动切换目录
+set tags=tags;               " 递归查找tags
+set encoding=utf8
 
-let g:mapleader=';'
-vnoremap <Leader>y "+y      " 设置快捷键将选中文本块复制至系统剪贴板
-nmap <Leader>p "+p          " 设置快捷键将系统剪贴板内容粘贴至
+"}}}
 
 " 快捷键设置{{{
 
-map <silent> eh :tabprevious<CR>
-map <silent> el :tabnext<CR>
-map <silent> eH :TabmovePrevious<CR>
-map <silent> eL :TabmoveNext<CR>
-map <silent> eN :nohlsearch<CR>
-map <silent> et o-------------------- <C-R>=strftime('%Y-%m-%d %H:%M:%S')<CR> --------------------<CR>
+map <silent> eh :nohlsearch<CR>
 map <silent> es :split<CR>
-map <silent> eS :vsplit<CR>
-"map <silent> ew :set nowrap!<CR>
+map <silent> ev :vsplit<CR>
 map <silent> eg :!/usr/bin/git log --stat %<CR>
 map <silent> eG :echo system('/usr/bin/git blame '.expand('%').' -p -L '.line('.').','.line('.'))<CR>
 map <silent> en :NERDTreeToggle<CR>
 map <silent> em :TlistToggle<CR>
-map <silent> ei <c-w>w
-map <silent> eI :set list!<CR>
-map <silent> ed :Dox<CR>
-map <silent> ea :DoxAuthor<CR>
-map <silent> ec :DoxLic<CR>
+map <silent> edd <F8>:Dox<CR><F8>
+map <silent> eda <F8>:DoxAuthor<CR><F8>
+map <silent> edc <F8>:DoxLic<CR><F8>
 map ee <C-]>  " 跳转到定义
 map E <C-t>   " 返回查找
-
 map <silent> ewq :wq<CR>       " 定义快捷键关闭当前分割窗口
 map <silent> eq :q<CR>       " 定义快捷键关闭当前分割窗口
 map <silent> eQ :q!<CR>       " 定义快捷键关闭当前分割窗口
 map <silent> ew :w<CR>       " 定义快捷键保存当前窗口内容
 nmap <leader>qa :qa!<CR>     " 不做任何保存，直接退出 vim
 nnoremap nw <C-W><C-W>      " 依次遍历子窗口
-nnoremap <Leader>lw <C-W>l  " 跳转至右方的窗口
-nnoremap <Leader>hw <C-W>h  " 跳转至方的窗口
-nnoremap <Leader>kw <C-W>k  " 跳转至上方的子窗口
-nnoremap <Leader>jw <C-W>j  " 跳转至下方的子窗口
-nnoremap <Leader>lw <C-W>l  " 跳转至右方的窗口
-set nocompatible            " 关闭 vi 兼容模式
-set list
-set listchars=tab:>-,trail:."TAB会被显示成 ">—" 而行尾多余的空白字符显示"." 2015-07-22
-set pastetoggle=<F8>
+nnoremap <C-l> <C-W>l  " 跳转至右方的窗口
+nnoremap <C-w> <C-W>h  " 跳转至方的窗口
+nnoremap <C-k> <C-W>k  " 跳转至上方的子窗口
+nnoremap <C-j> <C-W>j  " 跳转至下方的子窗口
+nnoremap <C-l> <C-W>l  " 跳转至右方的窗口
+set pastetoggle=<F8>   " 粘贴模式
 
-set hidden " 避免必须保存修改才可以跳转buffer
+inoremap jj <esc>
+nmap <leader><leader> :<CR>
+command W :w !sudo tee %
 
 "}}}
 
@@ -92,12 +86,6 @@ set background=dark
 
 " }}}
 
-" 设置vim更改配置后立即生效{{{
-if has("autocmd")
-    autocmd! bufwritepost vimrc source ~/.vimrc
-endif
-"}}}
-
 " 状态栏以及配色方案{{{
 set laststatus=2
 "set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [ASCII=\%03.3b]\[HEX=\%02.2B]\ [POS=%04l,%04v][%p%%]\ [LEN=%L]
@@ -111,8 +99,7 @@ nnoremap <C-S-RETURN> :bprevious<CR>
 map bn :bnext<cr>
 map bp :bprevious<cr>
 map bf :bfirst<cr>
-map bd :bdelete<cr>
-" 查看buffers
+map bd :bp <BAR> bd #<CR>
 nnoremap bl :ls<CR>
 " 通过索引快速跳转
 nnoremap <Leader>1 :1b<CR>
@@ -125,7 +112,7 @@ nnoremap <Leader>7 :7b<CR>
 nnoremap <Leader>8 :8b<CR>
 nnoremap <Leader>9 :9b<CR>
 nnoremap <Leader>0 :10b<CR>
-
+autocmd BufEnter *.c call SourceTagsVim()
 
 "}}}
 
@@ -150,170 +137,9 @@ nnoremap <C-l> <C-w>l
 "}}}
 
 " set fileformats=unix,dos,mac {{{
-nmap <leader>fd :se fileformat=dos<CR>
+nmap <leader>fw :se fileformat=dos<CR>
 nmap <leader>fu :se fileformat=unix<CR>
 "}}}
-
-" Python 文件的一般设置{{{
-autocmd FileType python set tabstop=4 shiftwidth=4 expandtab
-autocmd FileType python map <F12> :!python %<CR>
-"}}}
-
-"搜索所有文件名 FileFinder.vim {{{
-"2014.8.13
-"命令
-" :FileFinderShow   显示目录下所有文件
-" :map ea :FileFinderShow<CR> 绑定一个快捷键
-"快捷键
-" Enter             当前窗口打开文件
-" t                 新窗口打开文件
-" d                 删除文件
-" q                 退出FileFinder
-" r                 刷新
-" R                 运行命令
-"配置
-" g:FileFinder_Name = 'File_Finder' 标签名称
-" g:FileFinder_RunWithLess = 1 运行命令后是否加less
-"@author quanhengzhuang
-if exists('g:loaded_filefinder')
-    "finish
-endif
-let g:loaded_filefinder = 1
-
-command! -nargs=? FileFinderShow call s:FileFinder_Show(<f-args>)
-
-autocmd BufEnter *.filefinder call FileFinder_Refresh()
-
-let g:FileFinder_Name = 'File_Finder'
-
-let g:FileFinder_RunWithLess = 1
-
-let g:FileFinder_Count = 0
-
-let b:FileFinder_Cwd = ''
-
-function! s:FileFinder_Show(...)
-    if bufname('%') != '' || byte2line(1) != -1
-        tabnew
-    endif
-
-    let g:FileFinder_Count += 1
-    silent! execute 'file '.g:FileFinder_Name.'_'.g:FileFinder_Count
-
-    let cmd = 'find ./ -type f | grep -i -v "/\." | sort'
-    if a:0 == 1
-        let cmd = cmd.' | grep '.a:1
-    endif
-
-    call s:FileFinder_Execute(cmd)
-
-    call s:FileFinder_SetLocal()
-    call s:FileFinder_SetMaps()
-endfunction
-
-function! s:FileFinder_Execute(cmd)
-    let b:FileFinder_Cwd = getcwd()
-    let current = getpos('.')
-    0,$ delete
-    execute '0 read !'.a:cmd
-    $,$ delete
-    call setpos('.', current)
-endfunction
-
-let s:FileFinder_Count = [[], 0]
-function! FileFinder_ShowSearchCount()
-    let key = [@/, b:changedtick]
-    if s:FileFinder_Count[0] !=# key
-        let s:FileFinder_Count = [key, 0]
-        let pos = getpos('.')
-        let subscount = "0"
-        try
-            redir => subscount | silent %s///gne | redir END
-        catch
-        endtry
-        call setpos('.', pos)
-        let s:FileFinder_Count[1] = str2nr(matchstr(subscount, '\d\+'))
-    endif
-    return '<'.s:FileFinder_Count[1].'> '.@/
-endfunction
-
-function! s:FileFinder_SetLocal()
-    setfiletype filefinder
-    setlocal nobuflisted
-    setlocal buftype=nofile
-    setlocal noswapfile
-    setlocal nomodifiable
-    setlocal cursorline
-
-    setlocal statusline=%{b:FileFinder_Cwd}
-    setlocal statusline+=\ <%L>\ Files
-    setlocal statusline+=\ %{FileFinder_ShowSearchCount()}
-endfunction
-
-function! s:FileFinder_SetMaps()
-    map <buffer> <CR> :execute 'edit '.simplify(b:FileFinder_Cwd.'/'.getline('.'))<CR>
-    map <buffer> t :execute 'tabnew '.simplify(b:FileFinder_Cwd.'/'.getline('.'))<CR>
-    map <buffer> q :quit<CR>
-    map <buffer> d :call FileFinder_DeleteHere()<CR>
-    map <buffer> c :call FileFinder_CopyHere()<CR>
-    map <buffer> m :call FileFinder_MoveHere()<CR>
-    map <buffer> r :call FileFinder_Refresh()<CR>
-    map <buffer> R :call FileFinder_RunHere()<CR>
-endfunction
-
-function! FileFinder_Refresh()
-    let cmd = 'find ./ -type f | grep -v "/\." | sort'
-    setlocal modifiable
-    call s:FileFinder_Execute(cmd)
-    setlocal nomodifiable
-endfunction
-
-function! FileFinder_DeleteHere()
-    let filename = simplify(b:FileFinder_Cwd.'/'.getline('.'))
-    if confirm('Delete file "'.filename.'"?', "yes\nno", 2) != 1
-        return
-    endif
-
-    if delete(filename) != 0
-        echo '删除失败'
-        return
-    endif
-
-    echo '删除成功'
-    setlocal modifiable | delete | setlocal nomodifiable
-    return
-endfunction
-
-function! FileFinder_CopyHere()
-    let filename = simplify(b:FileFinder_Cwd.'/'.getline('.'))
-    echohl Title
-    let target = input('Copy to: ', filename)
-    echohl None
-
-    let cmd = 'cp -f '.filename.' '.target
-    call system(cmd)
-    call FileFinder_Refresh()
-endfunction
-
-function! FileFinder_MoveHere()
-    let filename = simplify(b:FileFinder_Cwd.'/'.getline('.'))
-    echohl Title
-    let target = input('Move to: ', filename)
-    echohl None
-
-    let cmd = 'mv -f '.filename.' '.target
-    call system(cmd)
-    call FileFinder_Refresh()
-endfunction
-
-function! FileFinder_RunHere()
-    let filename = simplify(b:FileFinder_Cwd.'/'.getline('.'))
-    execute '!'.filename.(g:FileFinder_RunWithLess ? ' | less' : '')
-endfunction
-"}}}
-
-" 选中状态下 Ctrl+c 复制
-vmap <C-c> "+y
 
 " TagList 配置{{{
 "-----------------------------------------------------------------
@@ -334,8 +160,82 @@ let g:tlist_php_settings = 'php;c:class;i:interface;d:constant;f:function'
 "let Tlist_Compact_Format = 1
 "}}}
 
-set autochdir
-set tags=tags;
+" 插件管理vundle {{{
+set nocompatible              " be iMproved, required
+filetype off                  " required
+
+" set the runtime path to include Vundle and initialize
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+
+Plugin 'L9'                               " L9
+Plugin 'gmarik/Vundle.vim'                " 插件管理
+Plugin 'scrooloose/nerdtree'              " 目录树
+Plugin 'taglist.vim'                      " 标签列表插件
+Plugin 'scrooloose/syntastic'             " 语法检测插件
+Plugin 'airblade/vim-gitgutter'           " git插件
+Plugin 'bling/vim-airline'                " 状态栏插件
+Plugin 'terryma/vim-multiple-cursors'     " 多行编辑插件
+Plugin 'tomasr/molokai'                   " 主题
+Plugin 'mattn/emmet-vim'                  " 前端编辑插
+Plugin 'DoxygenToolkit.vim'               " 注释
+Plugin 'mhinz/vim-startify'               " 开始页面
+Plugin 'scrooloose/nerdcommenter'         " 注释插件
+Plugin 'bash-support.vim'                 " bash脚本插件
+Plugin 'Lokaltog/vim-easymotion'          " 快速移动插件
+Plugin 'plasticboy/vim-markdown'          " markdown
+Plugin 'sjl/gundo.vim'                    " undolist
+Plugin 'autocomplpop'                     " 补全提示
+Plugin 'kana/vim-smartinput'              " 智能输入
+Plugin 'tpope/vim-surround'               " 闭合处理
+Plugin 'yegappan/mru'                     " 最近打开的文件
+Plugin 'bling/vim-bufferline'             " buffer
+Plugin 'jeetsukumaran/vim-buffergator'    " buffer管理
+Plugin 'jlanzarotta/bufexplorer'          " buffer
+Plugin 'kien/ctrlp.vim'                   " 文件搜索
+Plugin 'craigemery/vim-autotag'           " 自动更新tags
+Plugin 'altercation/vim-colors-solarized' " 主题配色
+Plugin 'PDV--phpDocumentor-for-Vim'       " php方法注释
+Plugin 'StanAngeloff/php.vim'             " php标准
+Plugin 'brookhong/DBGPavim'               " 断点调试
+Plugin 'stephpy/vim-php-cs-fixer'         " psr代码风格修复
+Plugin 'godlygeek/tabular'                " 对齐
+Plugin 'Shougo/neocomplete.vim'           " 补全插件
+Plugin 'Shougo/neosnippet'
+Plugin 'Shougo/neosnippet-snippets'
+Plugin 'shawncplus/phpcomplete.vim'
+Plugin 'mileszs/ack.vim'
+Plugin 'dyng/ctrlsf.vim'
+Plugin 'tpope/vim-repeat'
+
+call vundle#end()            " required
+filetype plugin indent on    " required
+" }}}
+
+" php代码调试{{{
+map <leader>v :set paste<cr>yawoerror_log(print_r("\n<esc>pa\033[32m=error::shijie===>>".__CLASS__."->".__FUNCTION__."<<========================>>>>> \033[0m \n", true), 3, "/tmp/shijie.log");<ESC>oerror_log(print_r($<esc>pa, true), 3, "/tmp/shijie.log");<esc>,w:set nopaste<cr>
+
+map <leader>z :set paste<cr>oini_set("display_errors", 1);<cr>error_reporting(E_ALL);<cr><esc>
+
+set background=dark
+colorscheme solarized
+let g:rehash256 = 1
+"}}}
+
+" 忽略文件 {{{
+" Ignore file config
+set wildignore=*.o,*.obj,*~ "stuff to ignore when tab completing
+set wildignore+=*/tmp/*,*.so,*.swp,*.zip     " MacOSX/Linux
+set wildignore+=*DS_Store*
+set wildignore+=vendor/rails/**
+set wildignore+=vendor/cache/**
+set wildignore+=*.gem
+set wildignore+=log/**
+set wildignore+=tmp/**
+set wildignore+=*.png,*.jpg,*.gif
+set wildignore+=*.so,*.swp,*.zip,*/.Trash/**,*.pdf,*.dmg,*/Library/**,*/.rbenv/**
+set wildignore+=*/.nx/**,*.app,*.git,.git
+" }}}
 
 " NerdTree 配置! {{{
 "-----------------------------------------------------------------
@@ -360,82 +260,13 @@ nnoremap <silent><F2> :NERDTreeToggle<CR>
 let NERDTreeShowBookmarks=1
 "}}}
 
-" 插件管理vundle {{{
-set nocompatible              " be iMproved, required
-filetype off                  " required
-
-" set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-
-Plugin 'L9'
-Plugin 'gmarik/Vundle.vim'               " 插件管理
-Plugin 'scrooloose/nerdtree'             " 目录树
-Plugin 'taglist.vim'                     " 标签列表插件
-Plugin 'scrooloose/syntastic'            " 语法检测插件
-Plugin 'airblade/vim-gitgutter'          " git插件
-Plugin 'bling/vim-airline'               " 状态栏插件
-Plugin 'redguardtoo/evil-nerd-commenter' "
-Plugin 'terryma/vim-multiple-cursors'    " 多行编辑插件
-Plugin 'tomasr/molokai'                  " 主题
-Plugin 'mattn/emmet-vim'                 " 前端编辑插
-Plugin 'DoxygenToolkit.vim'              " 注释
-Plugin 'mhinz/vim-startify'              " 开始页面
-Plugin 'scrooloose/nerdcommenter'        " 注释插件
-Plugin 'bash-support.vim'                " bash脚本插件
-Plugin 'Lokaltog/vim-easymotion'         " 快速移动插件
-Plugin 'plasticboy/vim-markdown'         " markdown
-Plugin 'sjl/gundo.vim'                   " undolist
-Plugin 'ervandew/supertab'               " supertab
-Plugin 'autocomplpop'                    " 补全提示
-Plugin 'godlygeek/tabular'               " 对齐插件
-Plugin 'kana/vim-smartinput'             " 只能输入
-Plugin 'tpope/vim-surround'              " 闭合处理
-Plugin 'yegappan/mru'                    " 最近打开的文件
-Plugin 'bling/vim-bufferline'
-Plugin 'jeetsukumaran/vim-buffergator'
-"Plugin 'drmingdrmer/vim-tabbar'          " tab
-Plugin 'jlanzarotta/bufexplorer' " buffer
-Plugin 'kien/ctrlp.vim'
-Plugin 'craigemery/vim-autotag' "自动更新tags
-Plugin 'altercation/vim-colors-solarized'
-"Plugin 'UltiSnips'
-"Plugin 'shawncplus/phpcomplete.vim'
-"Plugin 'eikenb/acp'
-"Plugin 'othree/vim-autocomplpop'
-
-call vundle#end()            " required
-filetype plugin indent on    " required
-" }}}
-
-"let g:molokai_original = 1
-syntax enable
-set background=dark
-colorscheme solarized
-let g:rehash256 = 1
-
-" 忽略文件 {{{
-" Ignore file config
-set wildignore=*.o,*.obj,*~ "stuff to ignore when tab completing
-set wildignore+=*/tmp/*,*.so,*.swp,*.zip     " MacOSX/Linux
-set wildignore+=*DS_Store*
-set wildignore+=vendor/rails/**
-set wildignore+=vendor/cache/**
-set wildignore+=*.gem
-set wildignore+=log/**
-set wildignore+=tmp/**
-set wildignore+=*.png,*.jpg,*.gif
-set wildignore+=*.so,*.swp,*.zip,*/.Trash/**,*.pdf,*.dmg,*/Library/**,*/.rbenv/**
-set wildignore+=*/.nx/**,*.app,*.git,.git
-" }}}
-
 " 插件配置{{{
-" DoxygenToolkit
+" DoxygenToolkit=文档注释配置 {{{
 let g:doxygenToolkit_authorName="Wang Shi Jie<wangshijie@ucfgroup.com>"
-let g:DoxygenToolkit_commentType="PHP"
+let g:DoxygenToolkit_ckommentType="PHP"
 let g:DoxygenToolkit_briefTag_pre="@synopsis "
-let g:DoxygenToolkit_paramTag_pre="@param\t"
-let g:DoxygenToolkit_returnTag="@returns\t"
+let g:DoxygenToolkit_paramTag_pre="@param "
+let g:DoxygenToolkit_returnTag="@returns "
 "let g:DoxygenToolkit_blockHeader="--------------------------------------------------------------------------"
 "let g:DoxygenToolkit_blockFooter="--------------------------------------------------------------------------"
 let g:DoxygenToolkit_licenseTag = ''
@@ -453,84 +284,35 @@ let g:DoxygenToolkit_interCommentTag = " * "
 let g:DoxygenToolkit_endCommentTag = " */"
 let g:DoxygenToolkit_endCommentBlock = " */"
 
-"nnoremap ; :
-"nnoremap : ;
-xnoremap p pgvy
+"}}}
 
-"" easymotion
-let g:mapleader = ';'
-let g:EasyMotion_leader_key = ';'
-let g:EasyMotion_do_mapping = 0 " Disable default mappings
+" easymotion=快速移动配置 {{{
+"let g:EasyMotion_leader_key = 'f'
+let g:EasyMotion_do_mapping = 0
 
 " Bi-directional find motion
 " Jump to anywhere you want with minimal keystrokes, with just one key binding.
 " `s{char}{label}`
-nmap s <Plug>(easymotion-s)
+nmap f <Plug>(easymotion-s)
 " or
 " `s{char}{char}{label}`
 " Need one more keystroke, but on average, it may be more comfortable.
-nmap s <Plug>(easymotion-s2)
-
-" Turn on case insensitive feature
-let g:EasyMotion_smartcase = 1
+nmap f <Plug>(easymotion-s2)
 
 " JK motions: Line motions
 map <Leader>j <Plug>(easymotion-j)
 map <Leader>k <Plug>(easymotion-k)
-map <Leader>f <Plug>(easymotion-f)
-map <Leader>F <Plug>(easymotion-F)
-map <Leader>t <Plug>(easymotion-t)
-map <Leader>T <Plug>(easymotion-T)
-map <Leader>w <Plug>(easymotion-w)
-map <Leader>W <Plug>(easymotion-W)
-map <Leader>b <Plug>(easymotion-b)
-map <Leader>B <Plug>(easymotion-B)
-"map <Leader>e <Plug>(easymotion-e)
-"map <Leader>E <Plug>(easymotion-E)
-"map <Leader>ge <Plug>(easymotion-ge)
-"map <Leader>gE <Plug>(easymotion-gE)
-map <Leader>n <Plug>(easymotion-n)
-map <Leader>N <Plug>(easymotion-N)
-map <Leader>s <Plug>(easymotion-s)
+" }}}
 
-
-
-" Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
-let g:UltiSnipsExpandTrigger="<tab>"
-let g:UltiSnipsJumpForwardTrigger="<c-b>"
-let g:UltiSnipsJumpBackwardTrigger="<c-z>"
-
-" If you want :UltiSnipsEdit to split your window.
-let g:UltiSnipsEditSplit="vertical"
-
-"tabular 对齐插件
-let g:tabular_loaded = 1
-
+" airline=状态栏配置 {{{
 " Enable the list of buffers
 let g:airline#extensions#tabline#enabled = 1
 " Show just the filename
 let g:airline#extensions#tabline#fnamemod = ':t'
-" This allows buffers to be hidden if you've modified a buffer.
-" This is almost a must if you wish to use buffers in this way.
-set hidden
-" To open a new empty buffer
-" This replaces :tabnew which I used to bind to this mapping
-nmap <leader>T :enew<cr>
-" Move to the next buffer
-nmap <leader>l :bnext<CR>
-" Move to the previous buffer
-nmap <leader>h :bprevious<CR>
-" Close the current buffer and move to the previous one
-" This replicates the idea of closing a tab
-nmap <leader>bq :bp <BAR> bd #<CR>
-" Show all open buffers and their status
-nmap <leader>bl :ls<CR>
-" Setup some default ignores
-let g:ctrlp_custom_ignore = {
-  \ 'dir':  '\v[\/](\.(git|hg|svn)|\_site)$',
-  \ 'file': '\v\.(exe|so|dll|class|png|jpg|jpeg)$',
-\}
+let g:airline_powerline_fonts = 0
+" }}}
 
+" CtrlP=查找文件配置 {{{
 " Use the nearest .git directory as the cwd
 " This makes a lot of sense if you are working on a project that is in version
 " control. It also supports works with .svn, .hg, .bzr.
@@ -541,4 +323,178 @@ nmap <leader>p :CtrlP<cr>
 nmap <leader>bb :CtrlPBuffer<cr>
 nmap <leader>bm :CtrlPMixed<cr>
 nmap <leader>br :CtrlPMRU<cr>
+"}}}
+
+" DBGPavim=断点高度工具 {{{
+map <leader>dd :Dp<cr>
+map <leader>di <F2>
+map <leader>dr <F5>
+map <leader>dp <F12>
+map <leader>ds <F6><F6>
+map <leader>dn <F3>
+map <leader>db <F10>
+
+let g:dbgPavimPort = 9009
+let g:dbgPavimBreakAtEntry = 0
+"}}}
+
+" php doc 插件相关配置 {{{
+nnoremap <C-Y> :call PhpDocSingle()<CR>
+vnoremap <C-Y> :call PhpDocRange()<CR>
+"}}}
+
+" Tabuarize 配置 {{{
+let mapleader=';'
+nmap <Leader>a= :Tabularize /=<CR>
+vmap <Leader>a= :Tabularize /=<CR>
+nmap <Leader>a: :Tabularize /:\zs<CR>
+vmap <Leader>a" :Tabularize /"<CR>
 " }}}
+
+" Shougo/neocomplete.vim 自动补全配置 {{{
+
+"Note: This option must set it in .vimrc(_vimrc).  NOT IN .gvimrc(_gvimrc)!
+" Disable AutoComplPop.
+let g:acp_enableAtStartup = 0
+" Use neocomplete.
+let g:neocomplete#enable_at_startup = 1
+" Use smartcase.
+let g:neocomplete#enable_smart_case = 1
+" Set minimum syntax keyword length.
+let g:neocomplete#sources#syntax#min_keyword_length = 3
+let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
+
+" Define dictionary.
+let g:neocomplete#sources#dictionary#dictionaries = {
+    \ 'default' : '',
+    \ 'vimshell' : $HOME.'/.vimshell_hist',
+    \ 'scheme' : $HOME.'/.gosh_completions'
+        \ }
+
+" Define keyword.
+if !exists('g:neocomplete#keyword_patterns')
+    let g:neocomplete#keyword_patterns = {}
+endif
+let g:neocomplete#keyword_patterns['default'] = '\h\w*'
+
+" Plugin key-mappings.
+inoremap <expr><C-g>     neocomplete#undo_completion()
+inoremap <expr><C-l>     neocomplete#complete_common_string()
+
+" Recommended key-mappings.
+" <CR>: close popup and save indent.
+inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+function! s:my_cr_function()
+  return neocomplete#close_popup() . "\<CR>"
+  " For no inserting <CR> key.
+  "return pumvisible() ? neocomplete#close_popup() : "\<CR>"
+endfunction
+" <TAB>: completion.
+inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+" <C-h>, <BS>: close popup and delete backword char.
+inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
+inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
+inoremap <expr><C-y>  neocomplete#close_popup()
+inoremap <expr><C-e>  neocomplete#cancel_popup()
+" Close popup by <Space>.
+"inoremap <expr><Space> pumvisible() ? neocomplete#close_popup() : "\<Space>"
+
+" For cursor moving in insert mode(Not recommended)
+"inoremap <expr><Left>  neocomplete#close_popup() . "\<Left>"
+"inoremap <expr><Right> neocomplete#close_popup() . "\<Right>"
+"inoremap <expr><Up>    neocomplete#close_popup() . "\<Up>"
+"inoremap <expr><Down>  neocomplete#close_popup() . "\<Down>"
+" Or set this.
+"let g:neocomplete#enable_cursor_hold_i = 1
+" Or set this.
+"let g:neocomplete#enable_insert_char_pre = 1
+
+" AutoComplPop like behavior.
+"let g:neocomplete#enable_auto_select = 1
+
+" Shell like behavior(not recommended).
+"set completeopt+=longest
+"let g:neocomplete#enable_auto_select = 1
+"let g:neocomplete#disable_auto_complete = 1
+"inoremap <expr><TAB>  pumvisible() ? "\<Down>" : "\<C-x>\<C-u>"
+
+" Enable omni completion.
+autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+autocmd FileType php setlocal omnifunc=phpcomplete#CompleteTags
+
+" Enable heavy omni completion.
+if !exists('g:neocomplete#sources#omni#input_patterns')
+  let g:neocomplete#sources#omni#input_patterns = {}
+endif
+let g:neocomplete#sources#omni#input_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
+"let g:neocomplete#sources#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
+"let g:neocomplete#sources#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
+
+" For perlomni.vim setting.
+" https://github.com/c9s/perlomni.vim
+let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
+
+" Plugin key-mappings.
+imap <C-k>     <Plug>(neosnippet_expand_or_jump)
+smap <C-k>     <Plug>(neosnippet_expand_or_jump)
+xmap <C-k>     <Plug>(neosnippet_expand_target)
+
+" SuperTab like snippets behavior.
+imap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+\ "\<Plug>(neosnippet_expand_or_jump)"
+\: pumvisible() ? "\<C-n>" : "\<TAB>"
+smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+\ "\<Plug>(neosnippet_expand_or_jump)"
+\: "\<TAB>"
+
+" For conceal markers.
+if has('conceal')
+  set conceallevel=2 concealcursor=niv
+endif
+
+" Enable snipMate compatibility feature.
+let g:neosnippet#enable_snipmate_compatibility = 1
+
+" Tell Neosnippet about the other snippets
+let g:neosnippet#snippets_directory='/home/dev/.vim/bundle/neosnippet-snippets/neosnippets'
+
+" }}}
+
+" CtrlSF=在文件中查找 {{{
+let g:ctrlsf_default_root = 'project'
+let g:ctrlsf_indent = 2
+let g:ctrlsf_ackprg = 'ack'
+let g:ackprg='ack --type=php'
+nmap <leader>s :CtrlSF -filetype php 
+nmap     <C-F> <Plug>CtrlSFPrompt
+vmap     <C-F>f <Plug>CtrlSFVwordPath
+vmap     <C-F>F <Plug>CtrlSFVwordExec
+nmap     <C-F>n <Plug>CtrlSFCwordPath
+nmap     <C-F>p <Plug>CtrlSFPwordPath
+nnoremap <C-F>o :CtrlSFToggle<CR>
+" }}}
+
+"php-cs-fixer=PSR规则修正{{{
+
+" If php-cs-fixer is in $PATH, you don't need to define line below
+" let g:php_cs_fixer_path = "~/php-cs-fixer.phar" " define the path to the php-cs-fixer.phar
+let g:php_cs_fixer_level = "symfony"              " which level ?
+let g:php_cs_fixer_config = "default"             " configuration
+let g:php_cs_fixer_php_path = "php"               " Path to PHP
+" If you want to define specific fixers:
+"let g:php_cs_fixer_fixers_list = "linefeed,short_tag,indentation"
+let g:php_cs_fixer_enable_default_mapping = 1     " Enable the mapping by default (<leader>pcd)
+let g:php_cs_fixer_dry_run = 0                    " Call command with dry-run option
+let g:php_cs_fixer_verbose = 0                    " Return the output of command if 1, else an inline information.
+
+nnoremap <silent><leader>fd :call PhpCsFixerFixDirectory()<CR>
+nnoremap <silent><leader>ff :call PhpCsFixerFixFile()<CR>
+
+"}}}
+
+" }}}
+
