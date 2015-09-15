@@ -49,20 +49,20 @@ map <silent> em :TlistToggle<CR>
 map <silent> edd <F8>:Dox<CR><F8>
 map <silent> eda <F8>:DoxAuthor<CR><F8>
 map <silent> edc <F8>:DoxLic<CR><F8>
-map ee <C-]>  " 跳转到定义
-map E <C-t>   " 返回查找
-map <silent> ewq :wq<CR>       " 定义快捷键关闭当前分割窗口
-map <silent> eq :q<CR>       " 定义快捷键关闭当前分割窗口
-map <silent> eQ :q!<CR>       " 定义快捷键关闭当前分割窗口
-map <silent> ew :w<CR>       " 定义快捷键保存当前窗口内容
-nmap <leader>qa :qa!<CR>     " 不做任何保存，直接退出 vim
-nnoremap nw <C-W><C-W>      " 依次遍历子窗口
-nnoremap <C-l> <C-W>l  " 跳转至右方的窗口
-nnoremap <C-w> <C-W>h  " 跳转至方的窗口
-nnoremap <C-k> <C-W>k  " 跳转至上方的子窗口
-nnoremap <C-j> <C-W>j  " 跳转至下方的子窗口
-nnoremap <C-l> <C-W>l  " 跳转至右方的窗口
-set pastetoggle=<F8>   " 粘贴模式
+map ee <C-]>             " 跳转到定义
+map E <C-t>              " 返回查找
+map <silent> ewq :wq<CR> " 定义快捷键关闭当前分割窗口
+map <silent> eq :q<CR>   " 定义快捷键关闭当前分割窗口
+map <silent> eQ :q!<CR>  " 定义快捷键关闭当前分割窗口
+map <silent> ew :w<CR>   " 定义快捷键保存当前窗口内容
+nmap <leader>qa :qa!<CR> " 不做任何保存，直接退出 vim
+nnoremap nw <C-W><C-W>   " 依次遍历子窗口
+nnoremap <C-l> <C-W>l    " 跳转至右方的窗口
+nnoremap <C-w> <C-W>h    " 跳转至方的窗口
+nnoremap <C-k> <C-W>k    " 跳转至上方的子窗口
+nnoremap <C-j> <C-W>j    " 跳转至下方的子窗口
+nnoremap <C-l> <C-W>l    " 跳转至右方的窗口
+set pastetoggle=<F8>     " 粘贴模式
 
 inoremap jj <esc>
 nmap <leader><leader> :<CR>
@@ -346,9 +346,9 @@ vnoremap <C-Y> :call PhpDocRange()<CR>
 " Tabuarize 配置 {{{
 let mapleader=';'
 nmap <Leader>a= :Tabularize /=<CR>
-vmap <Leader>a= :Tabularize /=<CR>
+nmap <Leader>a= :Tabularize /=<CR>
 nmap <Leader>a: :Tabularize /:\zs<CR>
-vmap <Leader>a" :Tabularize /"<CR>
+nmap <Leader>a" :Tabularize /"<CR>
 " }}}
 
 " Shougo/neocomplete.vim 自动补全配置 {{{
