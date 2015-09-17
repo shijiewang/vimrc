@@ -34,6 +34,13 @@ set listchars=tab:>-,trail:. " TAB会被显示成 ' >— ' 而行尾多余的空
 set autochdir                " 自动切换目录
 set tags=tags;               " 递归查找tags
 set encoding=utf8
+autocmd FileType c,cpp,php set shiftwidth=4 | set expandtab | %retab!
+
+function StripTrailingWhite()
+    silent! %s/\s\+$//
+endfunction
+
+autocmd BufWritePre,FileWritePre * :call StripTrailingWhite()
 
 "}}}
 
@@ -200,13 +207,12 @@ Plugin 'StanAngeloff/php.vim'             " php标准
 Plugin 'brookhong/DBGPavim'               " 断点调试
 Plugin 'stephpy/vim-php-cs-fixer'         " psr代码风格修复
 Plugin 'godlygeek/tabular'                " 对齐
-Plugin 'Shougo/neocomplete.vim'           " 补全插件
-Plugin 'Shougo/neosnippet'
-Plugin 'Shougo/neosnippet-snippets'
-Plugin 'shawncplus/phpcomplete.vim'
-Plugin 'mileszs/ack.vim'
-Plugin 'dyng/ctrlsf.vim'
-Plugin 'tpope/vim-repeat'
+Plugin 'Valloric/YouCompleteMe'           " 自动补全插件
+Plugin 'shawncplus/phpcomplete.vim'       " php自动补全
+Plugin 'mileszs/ack.vim'                  " 搜索插件
+Plugin 'dyng/ctrlsf.vim'                  "
+Plugin 'tpope/vim-repeat'                 "
+Plugin 'exvim/ex-searchcompl'             "
 
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -261,6 +267,33 @@ let NERDTreeShowBookmarks=1
 "}}}
 
 " 插件配置{{{
+
+" YouCompleteMe 配置 {{{
+" YouCompleteMe 功能
+" 补全功能在注释中同样有效
+let g:ycm_complete_in_comments=1
+" 允许 vim 加载 .ycm_extra_conf.py 文件，不再提示
+let g:ycm_confirm_extra_conf=0
+" 开启 YCM 基于标签引擎
+let g:ycm_collect_identifiers_from_tags_files=1
+" 引入 C++ 标准库tags，这个没有也没关系，只要.ycm_extra_conf.py文件中指定了正确的标准库路径
+set tags+=/data/misc/software/misc./vim/stdcpp.tags
+" YCM 集成 OmniCppComplete 补全引擎，设置其快捷键
+inoremap <leader>; <C-x><C-o>
+" 补全内容不以分割子窗口形式出现，只显示补全列表
+set completeopt-=preview
+" 从第一个键入字符就开始罗列匹配项
+let g:ycm_min_num_of_chars_for_completion=1
+" 禁止缓存匹配项，每次都重新生成匹配项
+let g:ycm_cache_omnifunc=0
+" 语法关键字补全
+let g:ycm_seed_identifiers_with_syntax=1
+" 修改对C函数的补全快捷键，默认是CTRL + space，修改为ALT + ;
+let g:ycm_key_invoke_completion = '<M-;>'
+" 设置转到定义处的快捷键为ALT + G，这个功能非常赞
+nmap <M-g> :YcmCompleter GoToDefinitionElseDeclaration <C-R>=expand("<cword>")<CR><CR>
+" }}}
+
 " DoxygenToolkit=文档注释配置 {{{
 let g:doxygenToolkit_authorName="Wang Shi Jie<wangshijie@ucfgroup.com>"
 let g:DoxygenToolkit_ckommentType="PHP"
@@ -278,10 +311,10 @@ let g:DoxygenToolkit_briefTag_funcName="no"
 let g:doxygen_enhanced_color=1
 
 let g:DoxygenToolkit_startCommentTag = "/**"
-let g:DoxygenToolkit_startCommentBlock = "/**"
-let g:DoxygenToolkit_interCommentBlock = " * "
 let g:DoxygenToolkit_interCommentTag = " * "
 let g:DoxygenToolkit_endCommentTag = " */"
+let g:DoxygenToolkit_startCommentBlock = "/**"
+let g:DoxygenToolkit_interCommentBlock = " * "
 let g:DoxygenToolkit_endCommentBlock = " */"
 
 "}}}
@@ -351,125 +384,12 @@ nmap <Leader>a: :Tabularize /:\zs<CR>
 nmap <Leader>a" :Tabularize /"<CR>
 " }}}
 
-" Shougo/neocomplete.vim 自动补全配置 {{{
-
-"Note: This option must set it in .vimrc(_vimrc).  NOT IN .gvimrc(_gvimrc)!
-" Disable AutoComplPop.
-let g:acp_enableAtStartup = 0
-" Use neocomplete.
-let g:neocomplete#enable_at_startup = 1
-" Use smartcase.
-let g:neocomplete#enable_smart_case = 1
-" Set minimum syntax keyword length.
-let g:neocomplete#sources#syntax#min_keyword_length = 3
-let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
-
-" Define dictionary.
-let g:neocomplete#sources#dictionary#dictionaries = {
-    \ 'default' : '',
-    \ 'vimshell' : $HOME.'/.vimshell_hist',
-    \ 'scheme' : $HOME.'/.gosh_completions'
-        \ }
-
-" Define keyword.
-if !exists('g:neocomplete#keyword_patterns')
-    let g:neocomplete#keyword_patterns = {}
-endif
-let g:neocomplete#keyword_patterns['default'] = '\h\w*'
-
-" Plugin key-mappings.
-inoremap <expr><C-g>     neocomplete#undo_completion()
-inoremap <expr><C-l>     neocomplete#complete_common_string()
-
-" Recommended key-mappings.
-" <CR>: close popup and save indent.
-inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
-function! s:my_cr_function()
-  return neocomplete#close_popup() . "\<CR>"
-  " For no inserting <CR> key.
-  "return pumvisible() ? neocomplete#close_popup() : "\<CR>"
-endfunction
-" <TAB>: completion.
-inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
-" <C-h>, <BS>: close popup and delete backword char.
-inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
-inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
-inoremap <expr><C-y>  neocomplete#close_popup()
-inoremap <expr><C-e>  neocomplete#cancel_popup()
-" Close popup by <Space>.
-"inoremap <expr><Space> pumvisible() ? neocomplete#close_popup() : "\<Space>"
-
-" For cursor moving in insert mode(Not recommended)
-"inoremap <expr><Left>  neocomplete#close_popup() . "\<Left>"
-"inoremap <expr><Right> neocomplete#close_popup() . "\<Right>"
-"inoremap <expr><Up>    neocomplete#close_popup() . "\<Up>"
-"inoremap <expr><Down>  neocomplete#close_popup() . "\<Down>"
-" Or set this.
-"let g:neocomplete#enable_cursor_hold_i = 1
-" Or set this.
-"let g:neocomplete#enable_insert_char_pre = 1
-
-" AutoComplPop like behavior.
-"let g:neocomplete#enable_auto_select = 1
-
-" Shell like behavior(not recommended).
-"set completeopt+=longest
-"let g:neocomplete#enable_auto_select = 1
-"let g:neocomplete#disable_auto_complete = 1
-"inoremap <expr><TAB>  pumvisible() ? "\<Down>" : "\<C-x>\<C-u>"
-
-" Enable omni completion.
-autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
-autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
-autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
-autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
-autocmd FileType php setlocal omnifunc=phpcomplete#CompleteTags
-
-" Enable heavy omni completion.
-if !exists('g:neocomplete#sources#omni#input_patterns')
-  let g:neocomplete#sources#omni#input_patterns = {}
-endif
-let g:neocomplete#sources#omni#input_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
-"let g:neocomplete#sources#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
-"let g:neocomplete#sources#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
-
-" For perlomni.vim setting.
-" https://github.com/c9s/perlomni.vim
-let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
-
-" Plugin key-mappings.
-imap <C-k>     <Plug>(neosnippet_expand_or_jump)
-smap <C-k>     <Plug>(neosnippet_expand_or_jump)
-xmap <C-k>     <Plug>(neosnippet_expand_target)
-
-" SuperTab like snippets behavior.
-imap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-\ "\<Plug>(neosnippet_expand_or_jump)"
-\: pumvisible() ? "\<C-n>" : "\<TAB>"
-smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-\ "\<Plug>(neosnippet_expand_or_jump)"
-\: "\<TAB>"
-
-" For conceal markers.
-if has('conceal')
-  set conceallevel=2 concealcursor=niv
-endif
-
-" Enable snipMate compatibility feature.
-let g:neosnippet#enable_snipmate_compatibility = 1
-
-" Tell Neosnippet about the other snippets
-let g:neosnippet#snippets_directory='/home/dev/.vim/bundle/neosnippet-snippets/neosnippets'
-
-" }}}
-
 " CtrlSF=在文件中查找 {{{
 let g:ctrlsf_default_root = 'project'
 let g:ctrlsf_indent = 2
 let g:ctrlsf_ackprg = 'ack'
 let g:ackprg='ack --type=php'
-nmap <leader>s :CtrlSF -filetype php 
+nmap <leader>s :CtrlSF -filetype php
 nmap     <C-F> <Plug>CtrlSFPrompt
 vmap     <C-F>f <Plug>CtrlSFVwordPath
 vmap     <C-F>F <Plug>CtrlSFVwordExec
