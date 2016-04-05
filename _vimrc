@@ -78,7 +78,6 @@ command W :w !sudo tee %
 "}}}
 
 " 配色方案{{{
-set background=dark
 "colorscheme solarized
 "highlight TabLine term=underline cterm=bold ctermfg=9 ctermbg=4
 "highlight TabLineSel term=bold cterm=bold ctermbg=Red ctermfg=yellow
@@ -213,6 +212,10 @@ Plugin 'mileszs/ack.vim'                  " 搜索插件
 Plugin 'dyng/ctrlsf.vim'                  "
 Plugin 'tpope/vim-repeat'                 "
 Plugin 'exvim/ex-searchcompl'             "
+Plugin 'thinca/vim-quickrun'              " 快速执行
+Plugin 'pthrasher/conqueterm-vim'
+Plugin 'Yggdroot/indentLine'
+Plugin 'gregsexton/gitv'
 
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -330,7 +333,7 @@ nmap f <Plug>(easymotion-s)
 " or
 " `s{char}{char}{label}`
 " Need one more keystroke, but on average, it may be more comfortable.
-nmap f <Plug>(easymotion-s2)
+nmap f <Plug>(easymotion-s)
 
 " JK motions: Line motions
 map <Leader>j <Plug>(easymotion-j)
@@ -349,13 +352,33 @@ let g:airline_powerline_fonts = 0
 " Use the nearest .git directory as the cwd
 " This makes a lot of sense if you are working on a project that is in version
 " control. It also supports works with .svn, .hg, .bzr.
-let g:ctrlp_working_path_mode = 'r'
+let g:ctrlp_working_path_mode= 'ra'
 " Use a leader instead of the actual named binding
 nmap <leader>p :CtrlP<cr>
 " Easy bindings for its various modes
 nmap <leader>bb :CtrlPBuffer<cr>
 nmap <leader>bm :CtrlPMixed<cr>
 nmap <leader>br :CtrlPMRU<cr>
+let g:ctrlp_map = '<c-p>'
+let g:ctrlp_cmd = 'CtrlP'
+let g:ctrlp_open_multiple_files = 'v'         " <C-Z><C-O>时垂直分屏打开多个文件
+let g:ctrlp_match_window_bottom= 1
+let g:ctrlp_match_window_reversed=0
+let g:ctrlp_max_height= 100
+let g:ctrlp_mruf_max=1000
+let g:ctrlp_follow_symlinks=1"
+set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.png,*.jpg,*.jpeg,*.gif " MacOSX/Linux
+let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
+
+"if executable('ack')
+"  " Use Ag over Grep
+"  set grepprg=ack\ --nogroup\ --nocolor
+"  " Use ag in CtrlP for listing files.
+"  let g:ctrlp_user_command = 'ack %s -l --nocolor -g ""'
+"  " Ag is fast enough that CtrlP doesn't need to cache
+"  let g:ctrlp_use_caching = 0
+"endif
+
 "}}}
 
 " DBGPavim=断点高度工具 {{{
@@ -363,9 +386,10 @@ map <leader>dd :Dp<cr>
 map <leader>di <F2>
 map <leader>dr <F5>
 map <leader>dp <F12>
-map <leader>ds <F6><F6>
+map <leader>ds <F6>
 map <leader>dn <F3>
 map <leader>db <F10>
+map <leader>dv <F11>
 
 let g:dbgPavimPort = 9009
 let g:dbgPavimBreakAtEntry = 0
