@@ -58,6 +58,7 @@ map <silent> eda <F8>:DoxAuthor<CR><F8>
 map <silent> edc <F8>:DoxLic<CR><F8>
 map ee <C-]>             " 跳转到定义
 map E <C-t>              " 返回查找
+map <silent> eo <C-o><CR>" 返回查找
 map <silent> ewq :wq<CR> " 定义快捷键关闭当前分割窗口
 map <silent> eq :q<CR>   " 定义快捷键关闭当前分割窗口
 map <silent> eQ :q!<CR>  " 定义快捷键关闭当前分割窗口
@@ -65,14 +66,14 @@ map <silent> ew :w<CR>   " 定义快捷键保存当前窗口内容
 nmap <leader>qa :qa!<CR> " 不做任何保存，直接退出 vim
 nnoremap nw <C-W><C-W>   " 依次遍历子窗口
 nnoremap <C-l> <C-W>l    " 跳转至右方的窗口
-nnoremap <C-w> <C-W>h    " 跳转至方的窗口
 nnoremap <C-k> <C-W>k    " 跳转至上方的子窗口
 nnoremap <C-j> <C-W>j    " 跳转至下方的子窗口
-nnoremap <C-l> <C-W>l    " 跳转至右方的窗口
+nnoremap <C-h> <C-W>h    " 跳转至左方的窗口
 set pastetoggle=<F8>     " 粘贴模式
 
 inoremap jj <esc>
-nmap <leader><leader> :<CR>
+nmap <leader><leader> :
+nmap <leader>g :!/usr/bin/git blame %<CR>
 command W :w !sudo tee %
 
 "}}}
@@ -127,19 +128,12 @@ autocmd BufEnter *.c call SourceTagsVim()
 "nnoremap <C-S-TAB> :tabprev<CR>
 
 "关于tab的快捷键
-map <leader>tn :tabnext<cr>
-map <leader>tp :tabprevious<cr>
-map <leader>td :tabnew .<cr>
-map <leader>te :tabedit
-map <leader>to :tabonly
-map <leader>tc :tabclose<cr>
-"}}}
-
-"窗口分割时,进行切换快捷键!{{{
-nnoremap <C-h> <C-w>h
-nnoremap <C-j> <C-w>j
-nnoremap <C-k> <C-w>k
-nnoremap <C-l> <C-w>l
+map tp :tabprevious<cr>
+map tn :tabnext<cr>
+map td :tabnew .<cr>
+map te :tabedit <CR>
+map to :tabonly<CR>
+map tc :tabclose<cr>
 "}}}
 
 " set fileformats=unix,dos,mac {{{
@@ -174,7 +168,6 @@ filetype off                  " required
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 
-Plugin 'L9'                               " L9
 Plugin 'gmarik/Vundle.vim'                " 插件管理
 Plugin 'scrooloose/nerdtree'              " 目录树
 Plugin 'taglist.vim'                      " 标签列表插件
@@ -194,20 +187,13 @@ Plugin 'sjl/gundo.vim'                    " undolist
 Plugin 'autocomplpop'                     " 补全提示
 Plugin 'kana/vim-smartinput'              " 智能输入
 Plugin 'tpope/vim-surround'               " 闭合处理
-Plugin 'yegappan/mru'                     " 最近打开的文件
-Plugin 'bling/vim-bufferline'             " buffer
-Plugin 'jeetsukumaran/vim-buffergator'    " buffer管理
-Plugin 'jlanzarotta/bufexplorer'          " buffer
 Plugin 'kien/ctrlp.vim'                   " 文件搜索
 Plugin 'craigemery/vim-autotag'           " 自动更新tags
 Plugin 'altercation/vim-colors-solarized' " 主题配色
 Plugin 'PDV--phpDocumentor-for-Vim'       " php方法注释
-Plugin 'StanAngeloff/php.vim'             " php标准
 Plugin 'brookhong/DBGPavim'               " 断点调试
 Plugin 'stephpy/vim-php-cs-fixer'         " psr代码风格修复
 Plugin 'godlygeek/tabular'                " 对齐
-Plugin 'Valloric/YouCompleteMe'           " 自动补全插件
-Plugin 'shawncplus/phpcomplete.vim'       " php自动补全
 Plugin 'mileszs/ack.vim'                  " 搜索插件
 Plugin 'dyng/ctrlsf.vim'                  "
 Plugin 'tpope/vim-repeat'                 "
@@ -215,10 +201,22 @@ Plugin 'exvim/ex-searchcompl'             "
 Plugin 'thinca/vim-quickrun'              " 快速执行
 Plugin 'pthrasher/conqueterm-vim'
 Plugin 'Yggdroot/indentLine'
-Plugin 'gregsexton/gitv'
+Bundle 'dkprice/vim-easygrep'
+Bundle 'ervandew/supertab'
+Plugin 'vim-scripts/snipMate'
 
 call vundle#end()            " required
 filetype plugin indent on    " required
+set completeopt=longest,menu
+au FileType php set omnifunc=phpcomplete#CompletePHP
+" You might also find this useful
+" PHP Generated Code Highlights (HTML & SQL)
+
+let php_sql_query=1
+let php_htmlInStrings=1
+
+" Hope this helps!
+
 " }}}
 
 " php代码调试{{{
@@ -271,40 +269,14 @@ let NERDTreeShowBookmarks=1
 
 " 插件配置{{{
 
-" YouCompleteMe 配置 {{{
-" YouCompleteMe 功能
-" 补全功能在注释中同样有效
-let g:ycm_complete_in_comments=1
-" 允许 vim 加载 .ycm_extra_conf.py 文件，不再提示
-let g:ycm_confirm_extra_conf=0
-" 开启 YCM 基于标签引擎
-let g:ycm_collect_identifiers_from_tags_files=1
-" 引入 C++ 标准库tags，这个没有也没关系，只要.ycm_extra_conf.py文件中指定了正确的标准库路径
-set tags+=/data/misc/software/misc./vim/stdcpp.tags
-" YCM 集成 OmniCppComplete 补全引擎，设置其快捷键
-inoremap <leader>; <C-x><C-o>
-" 补全内容不以分割子窗口形式出现，只显示补全列表
-set completeopt-=preview
-" 从第一个键入字符就开始罗列匹配项
-let g:ycm_min_num_of_chars_for_completion=1
-" 禁止缓存匹配项，每次都重新生成匹配项
-let g:ycm_cache_omnifunc=0
-" 语法关键字补全
-let g:ycm_seed_identifiers_with_syntax=1
-" 修改对C函数的补全快捷键，默认是CTRL + space，修改为ALT + ;
-let g:ycm_key_invoke_completion = '<M-;>'
-" 设置转到定义处的快捷键为ALT + G，这个功能非常赞
-nmap <M-g> :YcmCompleter GoToDefinitionElseDeclaration <C-R>=expand("<cword>")<CR><CR>
-" }}}
-
 " DoxygenToolkit=文档注释配置 {{{
 let g:doxygenToolkit_authorName="Wang Shi Jie<wangshijie@ucfgroup.com>"
 let g:DoxygenToolkit_ckommentType="PHP"
 let g:DoxygenToolkit_briefTag_pre="@synopsis "
 let g:DoxygenToolkit_paramTag_pre="@param "
 let g:DoxygenToolkit_returnTag="@returns "
-"let g:DoxygenToolkit_blockHeader="--------------------------------------------------------------------------"
-"let g:DoxygenToolkit_blockFooter="--------------------------------------------------------------------------"
+let g:DoxygenToolkit_blockHeader="--------------------------------------------------------------------------"
+let g:DoxygenToolkit_blockFooter="--------------------------------------------------------------------------"
 let g:DoxygenToolkit_licenseTag = ''
 
 let s:licenseTag = "\<enter>www.firstp2p.com\<enter>"
@@ -367,17 +339,19 @@ let g:ctrlp_match_window_reversed=0
 let g:ctrlp_max_height= 100
 let g:ctrlp_mruf_max=1000
 let g:ctrlp_follow_symlinks=1"
-set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.png,*.jpg,*.jpeg,*.gif " MacOSX/Linux
+set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.png,*.jpg,*.jpeg,*.gif,*.js,*.html,*.css,*.log "MacOSX/Linux
 let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
 
-"if executable('ack')
-"  " Use Ag over Grep
-"  set grepprg=ack\ --nogroup\ --nocolor
-"  " Use ag in CtrlP for listing files.
-"  let g:ctrlp_user_command = 'ack %s -l --nocolor -g ""'
-"  " Ag is fast enough that CtrlP doesn't need to cache
-"  let g:ctrlp_use_caching = 0
-"endif
+if executable('ag')
+  " Use Ag over Grep
+  set grepprg=ag\ --nogroup\ --nocolor
+  " Use ag in CtrlP for listing files.
+  let g:ctrlp_user_command = 'ag %s -l --php --nocolor -g ""'
+  " Ag is fast enough that CtrlP doesn't need to cache
+  let g:ctrlp_use_caching = 0
+endif
+let g:ackprg = 'ag --nogroup --nocolor --column'
+"let g:ctrlp_user_command = 'ag %s -l --nocolor --hidden -g ""'
 
 "}}}
 
@@ -411,15 +385,9 @@ nmap <Leader>a" :Tabularize /"<CR>
 " CtrlSF=在文件中查找 {{{
 let g:ctrlsf_default_root = 'project'
 let g:ctrlsf_indent = 2
-let g:ctrlsf_ackprg = 'ack'
-let g:ackprg='ack --type=php'
-nmap <leader>s :CtrlSF -filetype php
-nmap     <C-F> <Plug>CtrlSFPrompt
-vmap     <C-F>f <Plug>CtrlSFVwordPath
-vmap     <C-F>F <Plug>CtrlSFVwordExec
-nmap     <C-F>n <Plug>CtrlSFCwordPath
-nmap     <C-F>p <Plug>CtrlSFPwordPath
-nnoremap <C-F>o :CtrlSFToggle<CR>
+let g:ctrlsf_ackprg = 'ag'
+let g:ackprg='ag --nogroup --nocolor --column --php'
+nmap <leader>s :CtrlSF -filetype php <c-r><c-w><CR>
 " }}}
 
 "php-cs-fixer=PSR规则修正{{{
@@ -438,6 +406,10 @@ let g:php_cs_fixer_verbose = 0                    " Return the output of command
 nnoremap <silent><leader>fd :call PhpCsFixerFixDirectory()<CR>
 nnoremap <silent><leader>ff :call PhpCsFixerFixFile()<CR>
 
+"}}}
+
+"--- SuperTab {{{
+let g:SuperTabMappingForward = '<s-tab>'
 "}}}
 
 " }}}
