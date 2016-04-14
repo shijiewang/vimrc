@@ -141,25 +141,6 @@ nmap <leader>fw :se fileformat=dos<CR>
 nmap <leader>fu :se fileformat=unix<CR>
 "}}}
 
-" TagList 配置{{{
-"-----------------------------------------------------------------
-" plugin - taglist.vim  查看函数列表，需要ctags程序
-" F4 打开隐藏taglist窗口
-"-----------------------------------------------------------------
-nnoremap <silent><F3> :TlistToggle<CR>
-let Tlist_Show_One_File = 1
-let Tlist_Use_Right_Window = 1
-let g:tlist_php_settings = 'php;c:class;i:interface;d:constant;f:function'
-
-"let Tlist_Auto_Open = 0
-"let Tlist_Auto_Update = 1
-"let Tlist_Hightlight_Tag_On_BufEnter = 1
-"let Tlist_Enable_Fold_Column = 0
-"let Tlist_Process_File_Always = 1
-"let Tlist_Display_Prototype = 0
-"let Tlist_Compact_Format = 1
-"}}}
-
 " 插件管理vundle {{{
 set nocompatible              " be iMproved, required
 filetype off                  " required
@@ -199,11 +180,12 @@ Plugin 'dyng/ctrlsf.vim'                  "
 Plugin 'tpope/vim-repeat'                 "
 Plugin 'exvim/ex-searchcompl'             "
 Plugin 'thinca/vim-quickrun'              " 快速执行
-Plugin 'pthrasher/conqueterm-vim'
-Plugin 'Yggdroot/indentLine'
-Bundle 'dkprice/vim-easygrep'
-Bundle 'ervandew/supertab'
-Plugin 'vim-scripts/snipMate'
+Plugin 'pthrasher/conqueterm-vim'         " shell
+Plugin 'Yggdroot/indentLine'              " 标线
+Plugin 'dkprice/vim-easygrep'             " easygrep
+Plugin 'ervandew/supertab'                " tab
+Plugin 'vim-scripts/snipMate'             " 代码片段
+Plugin 'vim-scripts/vawa.vim'             " 高亮当前光标变量
 
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -268,6 +250,28 @@ let NERDTreeShowBookmarks=1
 "}}}
 
 " 插件配置{{{
+
+" TagList 配置{{{
+"-----------------------------------------------------------------
+" plugin - taglist.vim  查看函数列表，需要ctags程序
+" F4 打开隐藏taglist窗口
+"-----------------------------------------------------------------
+nnoremap <silent><F3> :TlistToggle<CR>
+let Tlist_Show_One_File = 1
+let Tlist_Use_Right_Window = 1
+let g:tlist_php_settings = 'php;c:class;i:interface;d:constant;f:function'
+
+"let Tlist_Auto_Open = 0
+let Tlist_Auto_Update = 1
+let Tlist_Close_On_Select=1
+let Tlist_GainFocus_On_ToggleOpen=1
+let Tlist_Hightlight_Tag_On_BufEnter = 1
+let Tlist_Exit_OnlyWindow=1
+"let Tlist_Enable_Fold_Column = 0
+"let Tlist_Process_File_Always = 1
+"let Tlist_Display_Prototype = 0
+"let Tlist_Compact_Format = 1
+"}}}
 
 " DoxygenToolkit=文档注释配置 {{{
 let g:doxygenToolkit_authorName="Wang Shi Jie<wangshijie@ucfgroup.com>"
