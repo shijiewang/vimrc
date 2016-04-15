@@ -36,11 +36,21 @@ set tags=tags;               " 递归查找tags
 set encoding=utf8
 autocmd FileType c,cpp,php set shiftwidth=4 | set expandtab | %retab!
 
-function StripTrailingWhite()
+function! StripTrailingWhite()
     silent! %s/\s\+$//
 endfunction
 
 autocmd BufWritePre,FileWritePre * :call StripTrailingWhite()
+
+"" Out of the brackets
+"func SkipPair()
+"    if getline('.')[col('.') - 1] == ')' || getline('.')[col('.') - 1] == ']' || getline('.')[col('.') - 1] == '"' || getline('.')[col('.') - 1] == "'" || getline('.')[col('.') - 1] == '}'
+"        return "\<ESC>la"
+"    else
+"        return "\t"
+"    endif
+"endfunc
+"inoremap <TAB> <c-r>=SkipPair()<CR>
 
 "}}}
 
@@ -63,7 +73,7 @@ map <silent> ewq :wq<CR> " 定义快捷键关闭当前分割窗口
 map <silent> eq :q<CR>   " 定义快捷键关闭当前分割窗口
 map <silent> eQ :q!<CR>  " 定义快捷键关闭当前分割窗口
 map <silent> ew :w<CR>   " 定义快捷键保存当前窗口内容
-nmap <leader>qa :qa!<CR> " 不做任何保存，直接退出 vim
+"nmap <leader>qa :qa!<CR> " 不做任何保存，直接退出 vim
 nnoremap nw <C-W><C-W>   " 依次遍历子窗口
 nnoremap <C-l> <C-W>l    " 跳转至右方的窗口
 nnoremap <C-k> <C-W>k    " 跳转至上方的子窗口
@@ -74,7 +84,7 @@ set pastetoggle=<F8>     " 粘贴模式
 inoremap jj <esc>
 nmap <leader><leader> :
 nmap <leader>g :!/usr/bin/git blame %<CR>
-command W :w !sudo tee %
+command! W :w !sudo tee %
 
 "}}}
 
@@ -152,20 +162,19 @@ call vundle#begin()
 Plugin 'gmarik/Vundle.vim'                " 插件管理
 Plugin 'scrooloose/nerdtree'              " 目录树
 Plugin 'taglist.vim'                      " 标签列表插件
-Plugin 'scrooloose/syntastic'             " 语法检测插件
+"Plugin 'scrooloose/syntastic'             " 语法检测插件
 Plugin 'airblade/vim-gitgutter'           " git插件
 Plugin 'bling/vim-airline'                " 状态栏插件
 Plugin 'terryma/vim-multiple-cursors'     " 多行编辑插件
 Plugin 'tomasr/molokai'                   " 主题
 Plugin 'mattn/emmet-vim'                  " 前端编辑插
-Plugin 'DoxygenToolkit.vim'               " 注释
 Plugin 'mhinz/vim-startify'               " 开始页面
 Plugin 'scrooloose/nerdcommenter'         " 注释插件
 Plugin 'bash-support.vim'                 " bash脚本插件
 Plugin 'Lokaltog/vim-easymotion'          " 快速移动插件
 Plugin 'plasticboy/vim-markdown'          " markdown
 Plugin 'sjl/gundo.vim'                    " undolist
-Plugin 'autocomplpop'                     " 补全提示
+"Plugin 'autocomplpop'                     " 补全提示
 Plugin 'kana/vim-smartinput'              " 智能输入
 Plugin 'tpope/vim-surround'               " 闭合处理
 Plugin 'kien/ctrlp.vim'                   " 文件搜索
@@ -183,9 +192,16 @@ Plugin 'thinca/vim-quickrun'              " 快速执行
 Plugin 'pthrasher/conqueterm-vim'         " shell
 Plugin 'Yggdroot/indentLine'              " 标线
 Plugin 'dkprice/vim-easygrep'             " easygrep
-Plugin 'ervandew/supertab'                " tab
-Plugin 'vim-scripts/snipMate'             " 代码片段
-Plugin 'vim-scripts/vawa.vim'             " 高亮当前光标变量
+"Plugin 'ervandew/snipmate.vim'
+Plugin 'MarcWeber/vim-addon-mw-utils'
+Plugin 'tomtom/tlib_vim'
+Plugin 'garbas/vim-snipmate'
+Plugin 'honza/vim-snippets'
+"Plugin 'ervandew/supertab'                " tab
+"Plugin 'vim-scripts/vawa.vim'             " 高亮当前光标变量
+Plugin 'jeetsukumaran/vim-buffergator'
+Plugin 'vim-scripts/php_localvarcheck.vim'
+"Plugin 'joonty/vim-phpqa'
 
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -273,30 +289,6 @@ let Tlist_Exit_OnlyWindow=1
 "let Tlist_Compact_Format = 1
 "}}}
 
-" DoxygenToolkit=文档注释配置 {{{
-let g:doxygenToolkit_authorName="Wang Shi Jie<wangshijie@ucfgroup.com>"
-let g:DoxygenToolkit_ckommentType="PHP"
-let g:DoxygenToolkit_briefTag_pre="@synopsis "
-let g:DoxygenToolkit_paramTag_pre="@param "
-let g:DoxygenToolkit_returnTag="@returns "
-let g:DoxygenToolkit_blockHeader="--------------------------------------------------------------------------"
-let g:DoxygenToolkit_blockFooter="--------------------------------------------------------------------------"
-let g:DoxygenToolkit_licenseTag = ''
-
-let s:licenseTag = "\<enter>www.firstp2p.com\<enter>"
-let s:licenseTag = s:licenseTag . "All right reserved\<enter>"
-let s:licenseTag = s:licenseTag . "\<enter>Copyright(C)\<enter>"
-let g:DoxygenToolkit_briefTag_funcName="no"
-let g:doxygen_enhanced_color=1
-
-let g:DoxygenToolkit_startCommentTag = "/**"
-let g:DoxygenToolkit_interCommentTag = " * "
-let g:DoxygenToolkit_endCommentTag = " */"
-let g:DoxygenToolkit_startCommentBlock = "/**"
-let g:DoxygenToolkit_interCommentBlock = " * "
-let g:DoxygenToolkit_endCommentBlock = " */"
-
-"}}}
 
 " easymotion=快速移动配置 {{{
 "let g:EasyMotion_leader_key = 'f'
@@ -332,7 +324,8 @@ let g:ctrlp_working_path_mode= 'ra'
 " Use a leader instead of the actual named binding
 nmap <leader>p :CtrlP<cr>
 " Easy bindings for its various modes
-nmap <leader>bb :CtrlPBuffer<cr>
+"nmap <leader>bb :CtrlPBuffer<cr>
+nmap <leader>bb :BuffergatorOpen<cr>
 nmap <leader>bm :CtrlPMixed<cr>
 nmap <leader>br :CtrlPMRU<cr>
 let g:ctrlp_map = '<c-p>'
@@ -390,7 +383,7 @@ nmap <Leader>a" :Tabularize /"<CR>
 let g:ctrlsf_default_root = 'project'
 let g:ctrlsf_indent = 2
 let g:ctrlsf_ackprg = 'ag'
-let g:ackprg='ag --nogroup --nocolor --column --php'
+let g:ackprg='ag --nogroup --nocolor --column --php --html'
 nmap <leader>s :CtrlSF -filetype php <c-r><c-w><CR>
 " }}}
 
@@ -412,9 +405,27 @@ nnoremap <silent><leader>ff :call PhpCsFixerFixFile()<CR>
 
 "}}}
 
-"--- SuperTab {{{
-let g:SuperTabMappingForward = '<s-tab>'
+"SuperTab {{{
+"let g:SuperTabMappingForward = '<s-tab>'
 "}}}
 
+"startify {{{
+let g:startify_bookmarks = [
+        \'/home/dev/git/firstp2p/'
+    \]
+
 " }}}
+
+"syntasic {{{
+"set statusline+=%#warningmsg#
+"set statusline+=%{SyntasticStatuslineFlag()}
+"set statusline+=%*
+
+"let g:syntastic_always_populate_loc_list = 1
+"let g:syntastic_auto_loc_list = 1
+"let g:syntastic_check_on_open = 1
+"let g:syntastic_check_on_wq = 0
+"}}}
+
+"}}}
 
