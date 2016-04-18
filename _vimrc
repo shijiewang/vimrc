@@ -63,9 +63,6 @@ map <silent> eg :!/usr/bin/git log --stat %<CR>
 map <silent> eG :echo system('/usr/bin/git blame '.expand('%').' -p -L '.line('.').','.line('.'))<CR>
 map <silent> en :NERDTreeToggle<CR>
 map <silent> em :TlistToggle<CR>
-map <silent> edd <F8>:Dox<CR><F8>
-map <silent> eda <F8>:DoxAuthor<CR><F8>
-map <silent> edc <F8>:DoxLic<CR><F8>
 map ee <C-]>             " 跳转到定义
 map E <C-t>              " 返回查找
 map <silent> eo <C-o><CR>" 返回查找
@@ -111,13 +108,14 @@ autocmd BufEnter *.vimrc setlocal foldmethod=marker
 "}}}
 
 " Buffers操作快捷方式! {{{
-nnoremap <C-RETURN> :bnext<CR>
+map <C-RETURN> :bnext<CR>
 nnoremap <C-S-RETURN> :bprevious<CR>
 map bn :bnext<cr>
 map bp :bprevious<cr>
 map bf :bfirst<cr>
+map bl :blast<cr>
 map bd :bp <BAR> bd #<CR>
-nnoremap bl :ls<CR>
+"nnoremap bl :ls<CR>
 " 通过索引快速跳转
 nnoremap <Leader>1 :1b<CR>
 nnoremap <Leader>2 :2b<CR>
@@ -162,7 +160,7 @@ call vundle#begin()
 Plugin 'gmarik/Vundle.vim'                " 插件管理
 Plugin 'scrooloose/nerdtree'              " 目录树
 Plugin 'taglist.vim'                      " 标签列表插件
-"Plugin 'scrooloose/syntastic'             " 语法检测插件
+Plugin 'scrooloose/syntastic'             " 语法检测插件
 Plugin 'airblade/vim-gitgutter'           " git插件
 Plugin 'bling/vim-airline'                " 状态栏插件
 Plugin 'terryma/vim-multiple-cursors'     " 多行编辑插件
@@ -202,6 +200,7 @@ Plugin 'honza/vim-snippets'
 Plugin 'jeetsukumaran/vim-buffergator'
 Plugin 'vim-scripts/php_localvarcheck.vim'
 "Plugin 'joonty/vim-phpqa'
+Plugin 'junegunn/vim-easy-align'
 
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -254,7 +253,7 @@ set wildignore+=*/.nx/**,*.app,*.git,.git
 " r 递归刷新当前目录             R 递归刷新当前根目录
 "-----------------------------------------------------------------
 " F3 NERDTree 切换
-nnoremap <silent><F2> :NERDTreeToggle<CR>
+"nnoremap <silent><F2> :NERDTreeToggle<CR>
 " 在 vim 启动的时候默认开启 NERDTree（autocmd 可以缩写为 au）
 " autocmd VimEnter * NERDTreeToggle
 " 按下 F2 调出/隐藏 NERDTree
@@ -288,7 +287,6 @@ let Tlist_Exit_OnlyWindow=1
 "let Tlist_Display_Prototype = 0
 "let Tlist_Compact_Format = 1
 "}}}
-
 
 " easymotion=快速移动配置 {{{
 "let g:EasyMotion_leader_key = 'f'
@@ -324,8 +322,8 @@ let g:ctrlp_working_path_mode= 'ra'
 " Use a leader instead of the actual named binding
 nmap <leader>p :CtrlP<cr>
 " Easy bindings for its various modes
-"nmap <leader>bb :CtrlPBuffer<cr>
-nmap <leader>bb :BuffergatorOpen<cr>
+nmap <leader>bb :CtrlPBuffer<cr>
+nmap el :BuffergatorOpen<cr>
 nmap <leader>bm :CtrlPMixed<cr>
 nmap <leader>br :CtrlPMRU<cr>
 let g:ctrlp_map = '<c-p>'
@@ -374,7 +372,7 @@ vnoremap <C-Y> :call PhpDocRange()<CR>
 " Tabuarize 配置 {{{
 let mapleader=';'
 nmap <Leader>a= :Tabularize /=<CR>
-nmap <Leader>a= :Tabularize /=<CR>
+nmap <Leader>aa :Tabularize /=><CR>
 nmap <Leader>a: :Tabularize /:\zs<CR>
 nmap <Leader>a" :Tabularize /"<CR>
 " }}}
@@ -417,14 +415,20 @@ let g:startify_bookmarks = [
 " }}}
 
 "syntasic {{{
-"set statusline+=%#warningmsg#
-"set statusline+=%{SyntasticStatuslineFlag()}
-"set statusline+=%*
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
 
+let g:syntastic_php_checkers = ['php', 'phpmd --minimumpriority']
+let g:syntastic_aggregate_errors = 1
 "let g:syntastic_always_populate_loc_list = 1
 "let g:syntastic_auto_loc_list = 1
 "let g:syntastic_check_on_open = 1
-"let g:syntastic_check_on_wq = 0
+let g:syntastic_check_on_wq = 1
+"}}}
+
+"markdown{{{
+let g:vim_markdown_folding_disabled = 1
 "}}}
 
 "}}}
