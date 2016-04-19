@@ -68,7 +68,6 @@ map E <C-t>              " 返回查找
 map <silent> eo <C-o><CR>" 返回查找
 map <silent> ewq :wq<CR> " 定义快捷键关闭当前分割窗口
 map <silent> eq :q<CR>   " 定义快捷键关闭当前分割窗口
-map <silent> ek :q<CR>   " 定义快捷键关闭当前分割窗口
 map <silent> eQ :q!<CR>  " 定义快捷键关闭当前分割窗口
 map <silent> ew :w<CR>   " 定义快捷键保存当前窗口内容
 "nmap <leader>qa :qa!<CR> " 不做任何保存，直接退出 vim
@@ -81,7 +80,8 @@ set pastetoggle=<F8>     " 粘贴模式
 
 inoremap jj <esc>
 nmap <leader><leader> :
-nmap <leader>g :!/usr/bin/git blame %<CR>
+nmap <leader>gb :!/usr/bin/git blame %<CR>
+nmap <leader>gd :!/usr/bin/git diff %<CR>
 command! W :w !sudo tee %
 
 "}}}
@@ -201,7 +201,7 @@ Plugin 'honza/vim-snippets'
 Plugin 'jeetsukumaran/vim-buffergator'
 "Plugin 'vim-scripts/php_localvarcheck.vim'
 "Plugin 'joonty/vim-phpqa'
-Plugin 'junegunn/vim-easy-align'
+"Plugin 'junegunn/vim-easy-align'
 
 call vundle#end()            " required
 filetype plugin indent on    " required
