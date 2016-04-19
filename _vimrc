@@ -68,6 +68,7 @@ map E <C-t>              " 返回查找
 map <silent> eo <C-o><CR>" 返回查找
 map <silent> ewq :wq<CR> " 定义快捷键关闭当前分割窗口
 map <silent> eq :q<CR>   " 定义快捷键关闭当前分割窗口
+map <silent> ek :q<CR>   " 定义快捷键关闭当前分割窗口
 map <silent> eQ :q!<CR>  " 定义快捷键关闭当前分割窗口
 map <silent> ew :w<CR>   " 定义快捷键保存当前窗口内容
 "nmap <leader>qa :qa!<CR> " 不做任何保存，直接退出 vim
@@ -198,7 +199,7 @@ Plugin 'honza/vim-snippets'
 "Plugin 'ervandew/supertab'                " tab
 "Plugin 'vim-scripts/vawa.vim'             " 高亮当前光标变量
 Plugin 'jeetsukumaran/vim-buffergator'
-Plugin 'vim-scripts/php_localvarcheck.vim'
+"Plugin 'vim-scripts/php_localvarcheck.vim'
 "Plugin 'joonty/vim-phpqa'
 Plugin 'junegunn/vim-easy-align'
 
