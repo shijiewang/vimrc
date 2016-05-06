@@ -68,6 +68,7 @@ map E <C-t>              " 返回查找
 map <silent> eo <C-o><CR>" 返回查找
 map <silent> ewq :wq<CR> " 定义快捷键关闭当前分割窗口
 map <silent> eq :q<CR>   " 定义快捷键关闭当前分割窗口
+map <silent> ek :q<CR>   " 定义快捷键关闭当前分割窗口
 map <silent> eQ :q!<CR>  " 定义快捷键关闭当前分割窗口
 map <silent> ew :w<CR>   " 定义快捷键保存当前窗口内容
 "nmap <leader>qa :qa!<CR> " 不做任何保存，直接退出 vim
@@ -83,6 +84,24 @@ nmap <leader><leader> :
 nmap <leader>gb :!/usr/bin/git blame %<CR>
 nmap <leader>gd :!/usr/bin/git diff %<CR>
 command! W :w !sudo tee %
+
+function! Zoom ()
+    " check if is the zoomed state (tabnumber > 1 && window == 1)
+    if tabpagenr('$') > 1 && tabpagewinnr(tabpagenr(), '$') == 1
+        let l:cur_winview = winsaveview()
+        let l:cur_bufname = bufname('')
+        tabclose
+
+        " restore the view
+        if l:cur_bufname == bufname('')
+            call winrestview(cur_winview)
+        endif
+    else
+        tab split
+    endif
+endfunction
+
+nmap ef :call Zoom()<CR>
 
 "}}}
 
@@ -157,12 +176,13 @@ filetype off                  " required
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
-
+"Plugin 'L9'
 Plugin 'gmarik/Vundle.vim'                " 插件管理
 Plugin 'scrooloose/nerdtree'              " 目录树
 Plugin 'taglist.vim'                      " 标签列表插件
 Plugin 'scrooloose/syntastic'             " 语法检测插件
 Plugin 'airblade/vim-gitgutter'           " git插件
+Plugin 'tpope/vim-fugitive'
 Plugin 'bling/vim-airline'                " 状态栏插件
 Plugin 'terryma/vim-multiple-cursors'     " 多行编辑插件
 Plugin 'tomasr/molokai'                   " 主题
@@ -173,7 +193,7 @@ Plugin 'bash-support.vim'                 " bash脚本插件
 Plugin 'Lokaltog/vim-easymotion'          " 快速移动插件
 Plugin 'plasticboy/vim-markdown'          " markdown
 Plugin 'sjl/gundo.vim'                    " undolist
-"Plugin 'autocomplpop'                     " 补全提示
+Plugin 'autocomplpop'                     " 补全提示
 Plugin 'kana/vim-smartinput'              " 智能输入
 Plugin 'tpope/vim-surround'               " 闭合处理
 Plugin 'kien/ctrlp.vim'                   " 文件搜索
@@ -202,6 +222,7 @@ Plugin 'jeetsukumaran/vim-buffergator'
 "Plugin 'vim-scripts/php_localvarcheck.vim'
 "Plugin 'joonty/vim-phpqa'
 "Plugin 'junegunn/vim-easy-align'
+Plugin 'alvan/vim-php-manual'
 
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -342,7 +363,7 @@ if executable('ag')
   " Use Ag over Grep
   set grepprg=ag\ --nogroup\ --nocolor
   " Use ag in CtrlP for listing files.
-  let g:ctrlp_user_command = 'ag %s -l --php --nocolor -g ""'
+  let g:ctrlp_user_command = 'ag %s -l --php --html --nocolor -g ""'
   " Ag is fast enough that CtrlP doesn't need to cache
   let g:ctrlp_use_caching = 0
 endif
@@ -420,7 +441,7 @@ set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
 
-let g:syntastic_php_checkers = ['php', 'phpmd --minimumpriority']
+let g:syntastic_php_checkers = ['php', 'phpmd']
 let g:syntastic_aggregate_errors = 1
 "let g:syntastic_always_populate_loc_list = 1
 "let g:syntastic_auto_loc_list = 1
