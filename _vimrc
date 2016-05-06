@@ -223,6 +223,7 @@ Plugin 'jeetsukumaran/vim-buffergator'
 "Plugin 'joonty/vim-phpqa'
 "Plugin 'junegunn/vim-easy-align'
 Plugin 'alvan/vim-php-manual'
+Plugin 'tpope/vim-unimpaired'
 
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -447,6 +448,10 @@ let g:syntastic_aggregate_errors = 1
 "let g:syntastic_auto_loc_list = 1
 "let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 1
+nmap <leader>es :Errors<CR>
+nmap <leader>en :lnext<CR>
+nmap <leader>ec :lclose<CR>
+nmap <leader>ep :lprevious<CR>
 "}}}
 
 "markdown{{{
